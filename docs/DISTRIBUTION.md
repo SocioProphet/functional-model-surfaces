@@ -14,11 +14,45 @@ The default user path is one suite command surface:
 brew tap SocioProphet/prophet
 brew install prophet-cli
 prophet doctor
+prophet devtools doctor
+prophet devtools profile apply ai-core
 prophet sourceos carry list
 prophet holmes analyze ./document.txt
 ```
 
 Specialized tools may also be installed directly, but every direct tool must have an equivalent `prophet <surface>` path.
+
+## SourceOS Developer Tools
+
+`sourceos-devtools` is the Linux/AI-native developer tools layer for SourceOS and SocioProphet.
+
+It is analogous in product role to Apple developer tooling, but it is built for local-first AI governance, lab profile selection, release engineering, model/service lifecycle control, and SourceOS workstation workflows.
+
+It must install a toolchain manager and profile resolver. It must not blindly install every heavy lab dependency, dataset, or model artifact.
+
+Initial profile families:
+
+- `sourceos-devtools-core`: git, gh, make, jq/yq, direnv, shell integration, evidence tooling.
+- `sourceos-devtools-build`: Go/Rust/Python/Node build support, release tooling, checksums, SBOM, attestations.
+- `sourceos-devtools-containers`: podman/buildah, Docker-compatible hooks, devcontainers, local registry support.
+- `sourceos-devtools-k8s`: kubectl, helm, kustomize, kind/k3d, local cluster hooks.
+- `sourceos-devtools-ai-core`: prophet, sourceos-ai, holmes, model-router, guardrail-fabric, agent-registry.
+- `sourceos-devtools-labs`: nlplab, translationlab, embeddinglab, speechlab, ocrlab, imagelab, videolab, timeserieslab, graphlab.
+- `sourceos-devtools-security`: cosign, SBOM/scanning tools, secret handling, provenance, policy checks.
+
+The user should be able to select only the profiles needed:
+
+```bash
+prophet devtools profile list
+prophet devtools profile apply core,ai-core,containers
+prophet lab enable image video embedding nlplab
+```
+
+SourceOS installer should also accept devtools profile selection:
+
+```bash
+prophet sourceos install --target m2 --channel dev --devtools core,ai-core,containers --labs image,video,embedding,nlplab
+```
 
 ## Artifact policy
 
@@ -45,6 +79,7 @@ brew tap SocioProphet/prophet
 Initial formulae:
 
 - `prophet-cli`: installs the `prophet` façade command.
+- `sourceos-devtools`: installs the SourceOS developer tools profile manager and lab launcher.
 - `sourceos-ai`: SourceOS AI carry client and local service launcher.
 - `sourceos-installer`: SourceOS installer and BootReleaseSet orchestration launcher.
 - `holmes`: Holmes language intelligence CLI and local service controller.
@@ -99,6 +134,11 @@ Every installable tool must implement:
 ```bash
 prophet doctor
 prophet version
+prophet devtools doctor
+prophet devtools profile list
+prophet devtools profile apply ai-core
+prophet lab list
+prophet lab enable image video embedding nlplab
 prophet sourceos install
 prophet sourceos carry list
 prophet sourceos carry validate
@@ -162,4 +202,5 @@ A product surface is not release-ready until:
 7. `brew install` works on Apple Silicon;
 8. `--version`, `doctor`, `self-test`, and `emit-evidence` commands work;
 9. it emits enough local evidence to identify version, build source, platform, policy, and service references;
-10. it has a rollback or previous-version recovery path when it modifies device state.
+10. it has a rollback or previous-version recovery path when it modifies device state;
+11. devtools and lab profile selection are recorded as evidence when installed through SourceOS or Prophet CLI.
