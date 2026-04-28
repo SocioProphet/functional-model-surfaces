@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "functional-service.v1",
+  "service": {
+    "id": "speech-transcription-baseline",
+    "name": "Speech Transcription Baseline",
+    "ownerRepository": "SociOS-Linux/speechlab",
+    "status": "experimental",
+    "description": "Example functional surface emitted by a lab for governed promotion."
+  },
+  "function": "speech",
+  "model": {
+    "modelRef": "oci://registry.example/socios/speech-transcription:0.1.0",
+    "adapterRefs": [],
+    "runtime": "container",
+    "mutableStatePolicy": "forbidden-in-sourceos"
+  },
+  "inputs": ["audio/wav", "audio/flac"],
+  "outputs": ["application/json+transcript"],
+  "evals": {
+    "required": true,
+    "references": ["evals/wer-baseline-001.json"],
+    "minimumPromotionGate": "candidate requires signed eval and dataset provenance"
+  },
+  "governance": {
+    "ledgerRequired": true,
+    "guardrailRequired": true,
+    "routingRequired": true,
+    "policyRefs": ["guardrail-fabric/policies/speech-transcription-default"]
+  },
+  "sourceosCarry": {
+    "allowed": true,
+    "carriesMutableModelState": false,
+    "clientRefRequired": true,
+    "launchProfileRefs": ["sourceos-model-carry/launch-profiles/speech-transcription"]
+  }
+}
