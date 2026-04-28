@@ -1,0 +1,47 @@
+schemaVersion: repo-maturity.v1
+repository: SocioProphet/functional-model-surfaces
+plane: standards
+status: active
+canonicality: canonical
+owners:
+  - SocioProphet
+maturity:
+  level: M2
+  targetLevel: M3
+  evidence:
+    - README.md defines purpose, doctrine, role, maturity gates, and integration path.
+    - schemas/repo-maturity.schema.json defines estate maturity record shape.
+    - schemas/functional-service.schema.json defines functional service manifest shape.
+    - examples/repo.maturity.example.yaml provides a reusable maturity record example.
+validation:
+  commands:
+    - make validate
+  ciRequired: true
+  lastKnownStatus: unknown
+integrations:
+  - repository: SocioProphet/prophet-platform
+    relationship: runtime consumer for graduated functional surfaces
+    required: true
+  - repository: SocioProphet/model-governance-ledger
+    relationship: promotion and evidence ledger consumer
+    required: true
+  - repository: SocioProphet/model-router
+    relationship: routing policy consumer
+    required: true
+  - repository: SocioProphet/guardrail-fabric
+    relationship: guardrail policy consumer
+    required: true
+  - repository: SocioProphet/agent-registry
+    relationship: agent authority and tool grant consumer
+    required: true
+  - repository: SourceOS-Linux/sourceos-model-carry
+    relationship: SourceOS carry-only reference consumer
+    required: true
+  - repository: SocioProphet/sociosphere
+    relationship: workspace governance and maturity ingestion
+    required: true
+nextActions:
+  - Add CI validation workflow.
+  - Add schema fixtures and negative tests.
+  - Register this repo in workspace-inventory/sociosphere scorecard.
+  - Mirror lab template into SociOS modality lab repositories.
