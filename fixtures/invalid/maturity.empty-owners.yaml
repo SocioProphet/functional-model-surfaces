@@ -1,0 +1,20 @@
+schemaVersion: repo-maturity.v1
+repository: SociOS-Linux/examplelab
+plane: socios-lab
+status: incubating
+canonicality: reference
+owners: []
+maturity:
+  level: M1
+  targetLevel: M3
+  evidence:
+    - README.md states lab purpose and modality.
+validation:
+  commands:
+    - make validate
+  ciRequired: true
+  lastKnownStatus: not-configured
+integrations:
+  - repository: SocioProphet/functional-model-surfaces
+    relationship: emits functional-service.v1 manifests
+    required: true

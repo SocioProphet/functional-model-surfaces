@@ -1,6 +1,6 @@
-.PHONY: validate test lint examples maturity
+.PHONY: validate test lint examples maturity negatives
 
-validate: lint examples maturity
+validate: lint examples maturity negatives
 
 lint:
 	python3 -m json.tool schemas/repo-maturity.schema.json >/dev/null
@@ -12,5 +12,8 @@ examples:
 
 maturity:
 	python3 tools/validate_maturity.py schemas/repo-maturity.schema.json repo.maturity.yaml
+
+negatives:
+	python3 tools/run_negative_fixtures.py
 
 test: validate
