@@ -6,18 +6,22 @@ canonicality: canonical
 owners:
   - SocioProphet
 maturity:
-  level: M2
-  targetLevel: M3
+  level: M3
+  targetLevel: M4
   evidence:
     - README.md defines purpose, doctrine, role, maturity gates, and integration path.
     - schemas/repo-maturity.schema.json defines estate maturity record shape.
     - schemas/functional-service.schema.json defines functional service manifest shape.
     - examples/repo.maturity.example.yaml provides a reusable maturity record example.
+    - .github/workflows/validate.yml runs make validate on every PR and push to main.
+    - fixtures/invalid/ contains 4 negative fixtures verified by tools/run_negative_fixtures.py.
+    - docs/MATURITY_MODEL.md documents M0-M5 levels, evidence requirements, and Sociosphere ingestion.
+    - docs/LAB_TEMPLATE.md describes the required lab repo skeleton and functional-service.v1 manifest.
 validation:
   commands:
     - make validate
   ciRequired: true
-  lastKnownStatus: unknown
+  lastKnownStatus: passing
 integrations:
   - repository: SocioProphet/prophet-platform
     relationship: runtime consumer for graduated functional surfaces
@@ -41,7 +45,7 @@ integrations:
     relationship: workspace governance and maturity ingestion
     required: true
 nextActions:
-  - Add CI validation workflow.
-  - Add schema fixtures and negative tests.
+  - Add versioned release artifacts with checksums for M4 readiness.
+  - Add SBOM or provenance attestation for release artifacts.
   - Register this repo in workspace-inventory/sociosphere scorecard.
   - Mirror lab template into SociOS modality lab repositories.

@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "functional-service.v1",
+  "service": {
+    "id": "speech-transcription-baseline",
+    "name": "Speech Transcription Baseline",
+    "ownerRepository": "SociOS-Linux/speechlab",
+    "status": "published",
+    "description": "Invalid status value 'published' - not in the allowed enum."
+  },
+  "function": "speech",
+  "model": {
+    "modelRef": "oci://registry.example/socios/speech-transcription:0.1.0",
+    "mutableStatePolicy": "forbidden-in-sourceos"
+  },
+  "inputs": ["audio/wav"],
+  "outputs": ["application/json+transcript"],
+  "evals": {
+    "required": true,
+    "references": []
+  },
+  "governance": {
+    "ledgerRequired": true,
+    "guardrailRequired": true,
+    "routingRequired": true
+  },
+  "sourceosCarry": {
+    "allowed": true,
+    "carriesMutableModelState": false,
+    "clientRefRequired": true
+  }
+}
