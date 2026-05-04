@@ -1,0 +1,171 @@
+{
+  "schemaVersion": "prophet-foundry-contract-spine.v0.1",
+  "foundry": {
+    "id": "prophet-intelligence-foundry",
+    "name": "Prophet Intelligence Foundry",
+    "status": "proposed",
+    "boundaryNotes": "Contract-first program for Prophet model data, training, post-training, RL, eval, release, and runtime promotion. It does not replace model-router, AgentPlane, Policy Fabric, Sociosphere, or SourceOS carry layers."
+  },
+  "contractFamilies": [
+    {
+      "name": "ModelSpec",
+      "status": "stub",
+      "owningPlane": "foundry",
+      "canonicalRepository": "SocioProphet/functional-model-surfaces",
+      "purpose": "Describe a Prophet model or compatible external model candidate before governance, routing, or SourceOS carry.",
+      "minimumFields": ["modelId", "family", "role", "architectureClass", "modalities", "governanceStatus"],
+      "mustNotOwn": ["runtime placement", "workspace mutation", "release approval"]
+    },
+    {
+      "name": "DataManifest",
+      "status": "stub",
+      "owningPlane": "foundry",
+      "canonicalRepository": "SocioProphet/functional-model-surfaces",
+      "purpose": "Record dataset/source/provenance/privacy/decontamination metadata for model training, eval, or synthetic data generation.",
+      "minimumFields": ["manifestId", "dataClass", "sources", "licenseClass", "privacyClass", "provenanceHash"],
+      "mustNotOwn": ["private raw data", "runtime memory writes", "release approval"]
+    },
+    {
+      "name": "TrainingRun",
+      "status": "stub",
+      "owningPlane": "foundry",
+      "canonicalRepository": "SocioProphet/functional-model-surfaces",
+      "purpose": "Describe pretraining, continued-pretraining, SFT, preference optimization, RL, distillation, adapter tuning, or eval-only runs.",
+      "minimumFields": ["runId", "runClass", "baseModelRef", "dataManifestRefs", "objective", "status", "evidenceRef"],
+      "mustNotOwn": ["model promotion", "SourceOS carry", "runtime route selection"]
+    },
+    {
+      "name": "EvalReport",
+      "status": "stub",
+      "owningPlane": "governance",
+      "canonicalRepository": "SocioProphet/functional-model-surfaces",
+      "purpose": "Summarize capability, reliability, autonomy, safety, cost, and regression evidence for a model/service candidate.",
+      "minimumFields": ["reportId", "modelRef", "suiteVersion", "capabilityScores", "safetyScores", "releaseRecommendation"],
+      "mustNotOwn": ["training data", "workspace execution", "local runtime placement"]
+    },
+    {
+      "name": "ModelReleaseDecision",
+      "status": "stub",
+      "owningPlane": "governance",
+      "canonicalRepository": "SocioProphet/functional-model-surfaces",
+      "purpose": "Record release-stage approval, block, remediation, revocation, rollback, and required evidence references.",
+      "minimumFields": ["decisionId", "modelRef", "stage", "decision", "requiredEvidenceRefs"],
+      "mustNotOwn": ["model training", "inference serving", "workspace mutation"]
+    },
+    {
+      "name": "ReasoningRuntimePlan",
+      "status": "stub",
+      "owningPlane": "routing",
+      "canonicalRepository": "SocioProphet/functional-model-surfaces",
+      "purpose": "Describe test-time compute mode, model graph, verifier policy, memory routing, tool policy, and computation budgets for a task.",
+      "minimumFields": ["planId", "taskClass", "reasoningMode", "modelGraph", "budgets", "verifierPolicy"],
+      "mustNotOwn": ["policy grant issuance", "workspace lock state", "model training"]
+    },
+    {
+      "name": "CapabilityGrant",
+      "status": "stub",
+      "owningPlane": "safety",
+      "canonicalRepository": "SocioProphet/functional-model-surfaces",
+      "purpose": "Represent bounded authority for an agent, task, tools, side effects, paths, policy hash, and expiry.",
+      "minimumFields": ["grantId", "subjectAgent", "humanAnchor", "allowedTools", "allowedSideEffects", "expiresAt"],
+      "mustNotOwn": ["model choice", "training run state", "repository inventory"]
+    },
+    {
+      "name": "RunCapsule",
+      "status": "stub",
+      "owningPlane": "agent-execution",
+      "canonicalRepository": "SocioProphet/functional-model-surfaces",
+      "purpose": "Represent replayable agent execution evidence across prompt digests, model refs, retrieved context, tool calls, workspace lease, receipts, diffs, tests, and final artifacts.",
+      "minimumFields": ["capsuleId", "taskId", "modelRefs", "toolCallRefs", "evidenceRefs"],
+      "mustNotOwn": ["workspace materialization", "policy authorship", "model release approval"]
+    },
+    {
+      "name": "AgentMachineReceipt",
+      "status": "stub",
+      "owningPlane": "runtime",
+      "canonicalRepository": "SocioProphet/functional-model-surfaces",
+      "sourceosProjectionRepository": "SourceOS-Linux/sourceos-spec",
+      "purpose": "Represent machine-local runtime evidence for probing, placement, execution, model load/unload, cache reuse, and policy-mediated side effects.",
+      "minimumFields": ["receiptId", "machineRef", "receiptClass", "placementFacts", "evidenceHash"],
+      "mustNotOwn": ["AgentPlane orchestration", "Policy Fabric authorization", "model-router selection"]
+    },
+    {
+      "name": "ToolContract",
+      "status": "stub",
+      "owningPlane": "safety",
+      "canonicalRepository": "SocioProphet/functional-model-surfaces",
+      "purpose": "Describe tool schemas, side effects, required capabilities, rollback strategy, and audit level before tool execution is admitted.",
+      "minimumFields": ["toolId", "sideEffectClass", "requiredCapabilities", "auditLevel"],
+      "mustNotOwn": ["tool implementation", "workspace state", "model weights"]
+    }
+  ],
+  "requiredRepositories": [
+    {
+      "repository": "SocioProphet/functional-model-surfaces",
+      "role": "contract spine",
+      "boundary": "Defines model, dataset, eval, release, routing, guardrail, tool, agent, and promotion contracts."
+    },
+    {
+      "repository": "SocioProphet/model-governance-ledger",
+      "role": "evidence ledger",
+      "boundary": "Records dataset, run, eval, safety, promotion, rollback, factsheet, and compliance evidence."
+    },
+    {
+      "repository": "SocioProphet/model-router",
+      "role": "route selector",
+      "boundary": "Selects governed model/service routes; does not train, release, or mutate workspaces."
+    },
+    {
+      "repository": "SocioProphet/guardrail-fabric",
+      "role": "safety fabric",
+      "boundary": "Provides guardrail policy around models, agents, tools, RAG packages, knowledge bases, and runtime deployment."
+    },
+    {
+      "repository": "SourceOS-Linux/sourceos-model-carry",
+      "role": "on-device service carry",
+      "boundary": "Carries approved signed model/service references, launch profiles, cache policy, and fallback references; no mutable model updates in OS images."
+    },
+    {
+      "repository": "SourceOS-Linux/agent-machine",
+      "role": "machine-local runtime substrate",
+      "boundary": "Owns runtime probing, inference provider lifecycle, model residency, cache-aware scheduling facts, AgentPod envelopes, and AgentMachineReceipt evidence."
+    },
+    {
+      "repository": "SocioProphet/agentplane",
+      "role": "agent execution plane",
+      "boundary": "Owns run lifecycle, validation, evidence capture, replay, and execution receipts."
+    }
+  ],
+  "promotionFlow": [
+    {
+      "step": "lab emits candidate functional service manifest",
+      "authority": "SocioProphet/functional-model-surfaces",
+      "requiredEvidence": ["FunctionalService", "DataManifest", "EvalReport"]
+    },
+    {
+      "step": "governance records evidence and release decision",
+      "authority": "SocioProphet/model-governance-ledger",
+      "requiredEvidence": ["EvalReport", "SafetyReport", "ModelReleaseDecision"]
+    },
+    {
+      "step": "routing admits a governed model/service route",
+      "authority": "SocioProphet/model-router",
+      "requiredEvidence": ["ModelRoutingDecision", "ReasoningRuntimePlan", "VerifierQuorum"]
+    },
+    {
+      "step": "SourceOS carries approved references only",
+      "authority": "SourceOS-Linux/sourceos-model-carry",
+      "requiredEvidence": ["ModelReleaseDecision", "SourceOS carry profile", "cache policy"]
+    },
+    {
+      "step": "Agent Machine emits runtime placement and execution receipts",
+      "authority": "SourceOS-Linux/agent-machine",
+      "requiredEvidence": ["AgentMachineReceipt", "ModelResidency", "InferenceProvider"]
+    },
+    {
+      "step": "AgentPlane binds receipts into replayable run capsules",
+      "authority": "SocioProphet/agentplane",
+      "requiredEvidence": ["RunCapsule", "CapabilityGrant", "ToolContract"]
+    }
+  ]
+}
