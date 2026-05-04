@@ -1,0 +1,130 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.org/functional-model-surfaces/prophet-foundry-contract-spine.v0.1.json",
+  "title": "Prophet Intelligence Foundry Contract Spine",
+  "description": "Contract-first spine for Prophet model family, data, training, evaluation, release, reasoning runtime, and governed execution integration.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "foundry",
+    "contractFamilies",
+    "requiredRepositories",
+    "promotionFlow"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "prophet-foundry-contract-spine.v0.1"
+    },
+    "foundry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "status", "boundaryNotes"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_.-]+$" },
+        "name": { "type": "string" },
+        "status": { "type": "string", "enum": ["draft", "proposed", "active", "deprecated"] },
+        "boundaryNotes": { "type": "string" }
+      }
+    },
+    "contractFamilies": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/contractFamily" }
+    },
+    "requiredRepositories": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/repositoryBinding" }
+    },
+    "promotionFlow": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/promotionStep" }
+    }
+  },
+  "$defs": {
+    "repositoryRef": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+    },
+    "contractFamily": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "status", "owningPlane", "canonicalRepository", "purpose", "minimumFields"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "enum": [
+            "ModelSpec",
+            "ModelFamilySpec",
+            "AdapterSpec",
+            "DatasetSpec",
+            "DataManifest",
+            "TrainingRun",
+            "PostTrainingRun",
+            "RewardModelSpec",
+            "EvalSuite",
+            "EvalReport",
+            "SafetyReport",
+            "InterpretabilityReport",
+            "ModelReleaseDecision",
+            "ReasoningRuntimePlan",
+            "ModelRoutingDecision",
+            "MemoryRoutingPlan",
+            "ToolContract",
+            "CapabilityGrant",
+            "WorkspaceLease",
+            "RunCapsule",
+            "AgentMachineReceipt",
+            "ModelResidency",
+            "InferenceProvider",
+            "ContextBundle",
+            "VerifierQuorum"
+          ]
+        },
+        "status": { "type": "string", "enum": ["stub", "draft", "candidate", "approved", "deprecated"] },
+        "owningPlane": {
+          "type": "string",
+          "enum": ["foundry", "governance", "routing", "safety", "runtime", "agent-execution", "workspace", "sourceos-carry", "memory-retrieval"]
+        },
+        "canonicalRepository": { "$ref": "#/$defs/repositoryRef" },
+        "sourceosProjectionRepository": { "$ref": "#/$defs/repositoryRef" },
+        "purpose": { "type": "string" },
+        "minimumFields": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" }
+        },
+        "mustNotOwn": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "repositoryBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "role", "boundary"],
+      "properties": {
+        "repository": { "$ref": "#/$defs/repositoryRef" },
+        "role": { "type": "string" },
+        "boundary": { "type": "string" }
+      }
+    },
+    "promotionStep": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["step", "authority", "requiredEvidence"],
+      "properties": {
+        "step": { "type": "string" },
+        "authority": { "$ref": "#/$defs/repositoryRef" },
+        "requiredEvidence": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}
