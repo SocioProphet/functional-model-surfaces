@@ -1,0 +1,244 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.org/functional-model-surfaces/dataset-risk-manifest.v1.json",
+  "title": "SocioProphet Dataset Risk Manifest",
+  "description": "Dataset contract for fairness, privacy, lineage, protected-attribute, consent, and lawful-use evaluation.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "dataset",
+    "lineage",
+    "labels",
+    "attributes",
+    "dataBoundary",
+    "riskControls"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "dataset-risk-manifest.v1"
+    },
+    "dataset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "ownerRepository",
+        "versionRef"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "ownerRepository": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+        },
+        "versionRef": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "lineage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceRefs",
+        "transformationRefs",
+        "licenseOrTerms"
+      ],
+      "properties": {
+        "sourceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "transformationRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "licenseOrTerms": {
+          "type": "string"
+        },
+        "collectionWindow": {
+          "type": "string"
+        }
+      }
+    },
+    "labels": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "labelColumns"
+      ],
+      "properties": {
+        "labelColumns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "favorableOutcome": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        },
+        "unfavorableOutcome": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        },
+        "rankingOutcomeColumn": {
+          "type": "string"
+        }
+      }
+    },
+    "attributes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protectedAttributes",
+        "sensitiveAttributes"
+      ],
+      "properties": {
+        "protectedAttributes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "handling"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "handling": {
+                "type": "string",
+                "enum": [
+                  "direct",
+                  "proxy-risk",
+                  "withheld",
+                  "synthetic",
+                  "not-collected"
+                ]
+              },
+              "privilegedValues": {
+                "type": "array",
+                "items": {
+                  "type": [
+                    "string",
+                    "number",
+                    "boolean"
+                  ]
+                }
+              },
+              "unprivilegedValues": {
+                "type": "array",
+                "items": {
+                  "type": [
+                    "string",
+                    "number",
+                    "boolean"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "sensitiveAttributes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "proxyRiskNotes": {
+          "type": "string"
+        }
+      }
+    },
+    "dataBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "classification",
+        "rawExportAllowed",
+        "consentRequired"
+      ],
+      "properties": {
+        "classification": {
+          "type": "string",
+          "enum": [
+            "synthetic",
+            "public",
+            "internal",
+            "customer-controlled",
+            "personal-consented",
+            "regulated"
+          ]
+        },
+        "rawExportAllowed": {
+          "type": "boolean",
+          "const": false
+        },
+        "consentRequired": {
+          "type": "boolean"
+        },
+        "retentionPolicyRef": {
+          "type": "string"
+        },
+        "deletionPolicyRef": {
+          "type": "string"
+        }
+      }
+    },
+    "riskControls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requiresFairnessEval",
+        "requiresPrivacyEval",
+        "requiresHumanReview"
+      ],
+      "properties": {
+        "requiresFairnessEval": {
+          "type": "boolean"
+        },
+        "requiresPrivacyEval": {
+          "type": "boolean"
+        },
+        "requiresHumanReview": {
+          "type": "boolean"
+        },
+        "allowedEvalProfiles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "mustNotUseFor": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
