@@ -1,0 +1,79 @@
+{
+  "schemaVersion": "trust-gate-policy.v1",
+  "policyId": "trustgate.platform-default",
+  "scope": {
+    "appliesTo": [
+      "model",
+      "adapter",
+      "rag-package",
+      "agent",
+      "functional-service"
+    ],
+    "ownerRepositories": [
+      "SocioProphet/prophet-platform",
+      "SocioProphet/functional-model-surfaces"
+    ],
+    "runtimeProfiles": [
+      "ci",
+      "platform",
+      "sourceos-runner"
+    ]
+  },
+  "gates": [
+    {
+      "gateId": "robustness",
+      "receiptTypes": [
+        "robustness"
+      ],
+      "requiredStatus": "pass",
+      "minimumFreshnessDays": 30,
+      "requiredMetricStatuses": [
+        "pass"
+      ],
+      "onPass": "allow",
+      "onWarn": "require-review",
+      "onFail": "quarantine",
+      "waiverAllowed": false
+    },
+    {
+      "gateId": "fairness",
+      "receiptTypes": [
+        "fairness",
+        "ranking-fairness"
+      ],
+      "requiredStatus": "review-allowed",
+      "minimumFreshnessDays": 30,
+      "requiredMetricStatuses": [
+        "pass",
+        "warn"
+      ],
+      "onPass": "allow",
+      "onWarn": "require-review",
+      "onFail": "block",
+      "waiverAllowed": true
+    }
+  ],
+  "defaultAction": "require-review",
+  "owners": [
+    "SocioProphet/platform-governance"
+  ],
+  "standardsCrosswalk": [
+    {
+      "standard": "NIST AI RMF",
+      "controlRefs": [
+        "GOVERN",
+        "MAP",
+        "MEASURE",
+        "MANAGE"
+      ]
+    },
+    {
+      "standard": "ISO/IEC 42001",
+      "controlRefs": [
+        "AI management system",
+        "risk treatment",
+        "monitoring"
+      ]
+    }
+  ]
+}
