@@ -1,0 +1,108 @@
+{
+  "schemaVersion": "trustops-receipt.v1",
+  "receiptId": "trustops.art-smoke.functional-service.demo-v0.1",
+  "receiptType": "robustness",
+  "subject": {
+    "kind": "functional-service",
+    "id": "demo-classifier",
+    "ownerRepository": "SocioProphet/prophet-platform",
+    "versionRef": "demo-v0.1",
+    "functionalServiceRef": "functional-service.demo-classifier"
+  },
+  "runner": {
+    "id": "trustops-art-runner",
+    "provider": "art",
+    "version": "1.20.x",
+    "executionMode": "ci",
+    "containerRef": "ghcr.io/socioprophet/trustops-art-runner:0.1.0",
+    "codeDigest": "sha256:example"
+  },
+  "inputs": {
+    "manifests": [
+      "examples/functional-service.example.json"
+    ],
+    "datasetRefs": [
+      "dataset-risk.demo-public-fixture"
+    ],
+    "modelRefs": [
+      "model.demo-classifier"
+    ],
+    "policyRefs": [
+      "trustgate.platform-default"
+    ],
+    "protectedAttributeRefs": [],
+    "dataBoundary": "synthetic",
+    "rawDataExported": false
+  },
+  "evaluation": {
+    "profile": "art-smoke",
+    "threatClasses": [
+      "evasion",
+      "inference",
+      "extraction"
+    ],
+    "metricFamilies": [
+      "robustness",
+      "privacy-leakage"
+    ],
+    "metrics": [
+      {
+        "name": "evasion_attack_success_rate",
+        "value": 0.08,
+        "threshold": 0.1,
+        "direction": "at-or-below",
+        "status": "pass",
+        "sliceRef": "all"
+      },
+      {
+        "name": "membership_inference_risk",
+        "value": "low",
+        "threshold": "medium",
+        "direction": "at-or-below",
+        "status": "pass",
+        "sliceRef": "all"
+      }
+    ]
+  },
+  "policy": {
+    "gateRef": "trustgate.platform-default.robustness",
+    "decision": "allow",
+    "reviewer": "automation"
+  },
+  "result": {
+    "status": "pass",
+    "summary": "ART smoke profile passed. No blocking adversarial or privacy leakage signal was observed in the synthetic fixture.",
+    "residualRisk": "low",
+    "recommendedMitigations": [
+      "Run full robustness profile before production promotion."
+    ]
+  },
+  "evidence": {
+    "artifactRefs": [
+      "artifact://trustops/art-smoke/demo-classifier/report.json"
+    ],
+    "redactionPolicy": "metrics-only",
+    "factsheetRefs": [
+      "factsheet.demo-classifier"
+    ]
+  },
+  "actions": [
+    {
+      "target": "model-governance-ledger",
+      "action": "record",
+      "details": "Store robustness receipt and promotion evidence."
+    },
+    {
+      "target": "guardrail-fabric",
+      "action": "allow",
+      "details": "No additional runtime guardrail required for synthetic smoke profile."
+    }
+  ],
+  "provenance": {
+    "createdAt": "2026-05-04T00:00:00Z",
+    "createdBy": "trustops-ci",
+    "sourceCommit": "0000000000000000000000000000000000000000",
+    "receiptDigest": "sha256:example",
+    "signatureRef": "sigstore://example"
+  }
+}

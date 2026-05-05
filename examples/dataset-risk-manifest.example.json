@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "dataset-risk-manifest.v1",
+  "dataset": {
+    "id": "dataset-risk.demo-public-fixture",
+    "name": "Demo Public Fixture",
+    "ownerRepository": "SocioProphet/functional-model-surfaces",
+    "versionRef": "demo-v0.1",
+    "description": "Synthetic fixture used to validate TrustOps receipts without exporting raw sensitive data."
+  },
+  "lineage": {
+    "sourceRefs": [
+      "synthetic://fixtures/demo-public"
+    ],
+    "transformationRefs": [
+      "transform://none"
+    ],
+    "licenseOrTerms": "synthetic-fixture",
+    "collectionWindow": "not-applicable"
+  },
+  "labels": {
+    "labelColumns": [
+      "approved"
+    ],
+    "favorableOutcome": true,
+    "unfavorableOutcome": false,
+    "rankingOutcomeColumn": "rank_score"
+  },
+  "attributes": {
+    "protectedAttributes": [
+      {
+        "name": "demo_group",
+        "handling": "synthetic",
+        "privilegedValues": [
+          "A"
+        ],
+        "unprivilegedValues": [
+          "B"
+        ]
+      }
+    ],
+    "sensitiveAttributes": [],
+    "proxyRiskNotes": "Synthetic fixture only."
+  },
+  "dataBoundary": {
+    "classification": "synthetic",
+    "rawExportAllowed": false,
+    "consentRequired": false,
+    "retentionPolicyRef": "policy.synthetic-fixture-retention",
+    "deletionPolicyRef": "policy.synthetic-fixture-deletion"
+  },
+  "riskControls": {
+    "requiresFairnessEval": true,
+    "requiresPrivacyEval": true,
+    "requiresHumanReview": false,
+    "allowedEvalProfiles": [
+      "art-smoke",
+      "aif360-smoke"
+    ],
+    "mustNotUseFor": [
+      "production-decisioning"
+    ]
+  }
+}
