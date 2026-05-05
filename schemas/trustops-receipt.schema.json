@@ -1,0 +1,459 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.org/functional-model-surfaces/trustops-receipt.v1.json",
+  "title": "SocioProphet TrustOps Receipt",
+  "description": "Canonical evidence receipt for fairness, robustness, explanation, uncertainty, RAG, ranking, and agent-trust evaluations.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "receiptId",
+    "receiptType",
+    "subject",
+    "runner",
+    "inputs",
+    "evaluation",
+    "policy",
+    "result",
+    "evidence",
+    "actions",
+    "provenance"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "trustops-receipt.v1"
+    },
+    "receiptId": {
+      "type": "string",
+      "pattern": "^trustops\\.[a-z0-9][a-z0-9_.:-]+$"
+    },
+    "receiptType": {
+      "type": "string",
+      "enum": [
+        "fairness",
+        "robustness",
+        "explanation",
+        "uncertainty",
+        "ranking-fairness",
+        "rag-trust",
+        "agent-trust",
+        "dataset-risk"
+      ]
+    },
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "id",
+        "ownerRepository",
+        "versionRef"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "model",
+            "adapter",
+            "dataset",
+            "rag-package",
+            "agent",
+            "tool",
+            "functional-service",
+            "route-policy"
+          ]
+        },
+        "id": {
+          "type": "string"
+        },
+        "ownerRepository": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+        },
+        "versionRef": {
+          "type": "string"
+        },
+        "functionalServiceRef": {
+          "type": "string"
+        }
+      }
+    },
+    "runner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "provider",
+        "version",
+        "executionMode"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "provider": {
+          "type": "string",
+          "enum": [
+            "socioprophet-trust-kernel",
+            "aif360",
+            "art",
+            "aix360",
+            "uq360",
+            "custom"
+          ]
+        },
+        "version": {
+          "type": "string"
+        },
+        "executionMode": {
+          "type": "string",
+          "enum": [
+            "local",
+            "ci",
+            "platform",
+            "enterprise-runner",
+            "sourceos-runner"
+          ]
+        },
+        "containerRef": {
+          "type": "string"
+        },
+        "codeDigest": {
+          "type": "string"
+        }
+      }
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manifests",
+        "dataBoundary",
+        "rawDataExported"
+      ],
+      "properties": {
+        "manifests": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "datasetRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "modelRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "policyRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "protectedAttributeRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "dataBoundary": {
+          "type": "string",
+          "enum": [
+            "synthetic",
+            "public",
+            "internal",
+            "customer-controlled",
+            "personal-consented",
+            "regulated"
+          ]
+        },
+        "rawDataExported": {
+          "type": "boolean",
+          "const": false
+        }
+      }
+    },
+    "evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "metrics"
+      ],
+      "properties": {
+        "profile": {
+          "type": "string"
+        },
+        "threatClasses": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "evasion",
+              "poisoning",
+              "extraction",
+              "inference",
+              "prompt-injection",
+              "tool-abuse",
+              "rag-leakage",
+              "memory-leakage"
+            ]
+          }
+        },
+        "metricFamilies": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "group-fairness",
+              "individual-fairness",
+              "ranking-fairness",
+              "counterfactual",
+              "subgroup-scan",
+              "calibration",
+              "uncertainty",
+              "explanation-quality",
+              "robustness",
+              "privacy-leakage"
+            ]
+          }
+        },
+        "metrics": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "value",
+              "threshold",
+              "status"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "value": {
+                "type": [
+                  "number",
+                  "string",
+                  "boolean"
+                ]
+              },
+              "threshold": {
+                "type": [
+                  "number",
+                  "string",
+                  "boolean"
+                ]
+              },
+              "direction": {
+                "type": "string",
+                "enum": [
+                  "at-or-above",
+                  "at-or-below",
+                  "equals",
+                  "informational"
+                ]
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "pass",
+                  "warn",
+                  "fail",
+                  "info"
+                ]
+              },
+              "sliceRef": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gateRef",
+        "decision"
+      ],
+      "properties": {
+        "gateRef": {
+          "type": "string"
+        },
+        "decision": {
+          "type": "string",
+          "enum": [
+            "allow",
+            "warn",
+            "require-review",
+            "quarantine",
+            "block",
+            "rollback",
+            "revoke"
+          ]
+        },
+        "waiverRef": {
+          "type": "string"
+        },
+        "reviewer": {
+          "type": "string"
+        },
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "summary"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "pass",
+            "warn",
+            "fail",
+            "error"
+          ]
+        },
+        "summary": {
+          "type": "string"
+        },
+        "residualRisk": {
+          "type": "string",
+          "enum": [
+            "none",
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ]
+        },
+        "recommendedMitigations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifactRefs",
+        "redactionPolicy"
+      ],
+      "properties": {
+        "artifactRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "redactionPolicy": {
+          "type": "string",
+          "enum": [
+            "none",
+            "metrics-only",
+            "redacted-artifacts",
+            "local-only"
+          ]
+        },
+        "factsheetRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "target",
+          "action"
+        ],
+        "properties": {
+          "target": {
+            "type": "string",
+            "enum": [
+              "model-router",
+              "guardrail-fabric",
+              "agent-registry",
+              "model-governance-ledger",
+              "sourceos-carry",
+              "human-review"
+            ]
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "record",
+              "allow",
+              "warn",
+              "route-fallback",
+              "require-review",
+              "quarantine",
+              "block",
+              "rollback",
+              "revoke-authority",
+              "disable-reference"
+            ]
+          },
+          "details": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "createdAt",
+        "createdBy",
+        "sourceCommit",
+        "receiptDigest"
+      ],
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "createdBy": {
+          "type": "string"
+        },
+        "sourceCommit": {
+          "type": "string"
+        },
+        "receiptDigest": {
+          "type": "string"
+        },
+        "signatureRef": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
