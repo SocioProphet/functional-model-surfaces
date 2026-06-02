@@ -1,0 +1,33 @@
+schema_version: effective-authority/v0.1
+repo: SocioProphet/functional-model-surfaces
+zone: C
+owner: Functional Model Surfaces provider-manifest lane
+maturity: draft
+
+authority_classes:
+  - model_surface_contract
+  - provider_capability_manifest
+  - adapter_boundary_declaration
+observation_channels:
+  - model_request
+control_channels:
+  - agent_to_agent
+egress_classes:
+  - model_request
+  - model_response
+  - metadata
+  - schema
+background_workers: []
+runtime_subjects:
+  - model_provider
+connector_surfaces:
+  - model_provider
+policy_sources:
+  - repo
+  - signed_config
+  - runtime_contract
+ledger_sinks:
+  - model-governance-ledger
+  - policy-fabric
+ci_validators:
+  - effective-authority-ci
