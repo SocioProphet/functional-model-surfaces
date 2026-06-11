@@ -111,6 +111,12 @@ Recommended method families:
 - `model.router.v1/*`
 - `agent.registry.v1/*`
 
+## v0.2 breaking-change policy
+
+See [`docs/v0.2-breaking-change-policy.md`](v0.2-breaking-change-policy.md) for the
+per-schema breaking-change rules, version-bump procedure, and consuming-repo coordination
+checklist.
+
 ## Non-goals
 
 This repository does not store model binaries, mutable model update channels, domain datasets, or runtime service implementations.
